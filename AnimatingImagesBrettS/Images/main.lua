@@ -1,5 +1,5 @@
 -- Title: TouchAndDrag
--- Name: Ms Raffin
+-- Name: Brett Shango
 -- Course: ICS2O/3C
 -- This program displays images that react to a person's finger.
 

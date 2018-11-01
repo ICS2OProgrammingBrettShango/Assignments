@@ -6,13 +6,13 @@
 -- hide the status bar
 display.setStatusBar(display.HiddenStatusBar)
 
--- global variables
+-- global variableslocal backgroundImage = display.newImageRect("Images/Thor_The_Dark_World_Asgard.png", 2120, 1550)
+
 ScrollSpeed2 = 3
 Scrollspeed = 2
 ScrollSpeed3 = 4
 
 -- local Variables. These are my images I will be using.
-local backgroundImage = display.newImageRect("Images/Thor_The_Dark_World_Asgard.png", 2120, 1550)
 
 local Spaceship = display.newImageRect("Images/Spaceship.png", 600, 600)
 local SpaceshipWidth = Spaceship.Width
