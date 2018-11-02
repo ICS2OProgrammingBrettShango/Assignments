@@ -20,8 +20,7 @@ local clockText
 local countDownTimer
 
 local gameOver
-local gameOverSoundChannel
-local gameOversound
+local GameOverChannel
 
 local lives = 3
 local heart1
@@ -45,8 +44,6 @@ local correctAnswer
 local pointsTextObject
 local numberCorrect = 0
 
-local backgroundImage 
-
 
 --------------------------------------------------------
 -- SOUNDS
@@ -59,9 +56,9 @@ local correctSoundChannel
 local wrongSound = audio.loadSound("Sounds/wrongSound.mp3")
 local wrongSoundChannel
 
--- gameOver Sound 
-local gameOverSound = audio.loadSound("Sounds/gameOver.mp3")
-local gameOverSoundChannel
+-- GameOver Sound 
+local GameOverSound = audio.loadSound("Sounds/GameOver.mp3")
+local GameOverSoundChannel
 
 --------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -69,7 +66,7 @@ local gameOverSoundChannel
 local function ShowGameOver()
 	-- Dislays the game over image and sound 
 	gameOver.isVisible = true
-	gameOverSoundChannel = audio.play(gameOver)
+	GameOverChannel = audio.play(GameOver)
 end
 
 local function UpdateHearts()
@@ -96,7 +93,9 @@ local function UpdateHearts()
       heart1.isVisible = false
       heart2.isVisible = false
       heart3.isVisible = false
-      timer.performWithDelay(1000,ShowGameOver)
+      timer.performWithDelay(1000,ShowgameOver)
+      GameOverChannel = audio.play(GameOver)
+      gameOver.isVisible = true
       numericField.isVisible = false
       pointsTextObject.isVisible = false
       questionObject.isVisible = false
@@ -196,14 +195,6 @@ local function AskQuestion()
   		questionObject.text = randomNumber1 .. " / " .. randomNumber2 .. " = "
 
   	elseif (randomOperator == 5) then
- 		-- Creates the product of the answer with division
-   		randomNumber1 = math.sqrt (1,10)
-   		randomNumber2 = math.sqrt (1,10)
-   		
-   		correctAnswer = randomNumber1 math.sqrt randomNumber2
-   		
-   		-- Displays the the question on th screen with Multiplication
-  		questionObject.text = randomNumber1 .. " math.sqrt " .. randomNumber2 .. " = "
 
 
    	end
@@ -284,7 +275,7 @@ local function NumericFieldListener( event )
    		 	lives = lives - 1
 
    		 	-- gameOver sound appears 
-            gameOverSoundChannel = audio.play(gameOver)
+            GameOverChannel = audio.play(GameOver)
 
    			-- this calls HideIncorrect after two seconds
     		timer.performWithDelay(2000,HideIncorrect)
@@ -324,7 +315,7 @@ gameOver = display.newImageRect("Images/gameOver.png", display.contentWidth, dis
 gameOver.anchorX = 0
 gameOver.anchorY = 0
 gameOver.isVisible = false
-gameOverSoundChannel = audio.play(gameOver)
+GameOverChannel = audio.play(GameOver)
 
 
 
