@@ -18,7 +18,11 @@ local totalSeconds = 10
 local secondsLeft = 10
 local clockText
 local countDownTimer
+
 local gameOver
+local gameOverSoundChannel
+local gameOversound
+
 local lives = 3
 local heart1
 local heart2
@@ -27,17 +31,21 @@ local heart3
 -- create other vaiables
 local questionObject
 local correctObject
-local IncorrectObject
+local incorrectObject
+
 local numericField
+
 local randomNumber1
 local randomNumber2
 local temp
 local randomOperator
-local IncorrectAnswer
+
 local correctAnswer
+
 local pointsTextObject
 local numberCorrect = 0
-local gameOverSoundChannel
+
+local backgroundImage 
 
 
 --------------------------------------------------------
@@ -51,13 +59,21 @@ local correctSoundChannel
 local wrongSound = audio.loadSound("Sounds/wrongSound.mp3")
 local wrongSoundChannel
 
-
+-- gameOver Sound 
+local gameOverSound = audio.loadSound("Sounds/gameOver.mp3")
+local gameOverSoundChannel
 
 --------------------------------------------------------
 -- LOCAL FUNCTIONS
 --------------------------------------------------------
+local function ShowGameOver()
+	-- Dislays the game over image and sound 
+	gameOver.isVisible = true
+	gameOverSoundChannel = audio.play(gameOver)
+end
+
 local function UpdateHearts()
- if (lives == 3) then
+ 	if (lives == 3) then
       heart1.isVisible = true
       heart2.isVisible = true
       heart3.isVisible = true
@@ -80,11 +96,11 @@ local function UpdateHearts()
       heart1.isVisible = false
       heart2.isVisible = false
       heart3.isVisible = false
-      TooBad.isVisible = true
+      timer.performWithDelay(1000,ShowGameOver)
       numericField.isVisible = false
       pointsTextObject.isVisible = false
       questionObject.isVisible = false
-     end
+    end
 end
 
 
@@ -106,7 +122,7 @@ local function UpdateTime()
   lives = lives - 1
 
 
-  --***IF THERE ARE NO LIVES LEFT, PLAY A LOSE SOUND,
+  --***IF THERE ARE NO LIVES LEFT, PLAY A LOSE SOUND,s
   --SHOW A "YOU LOSE IMAGE AND CANCEL THE TIMER, REMOVE
   --REMOVE THE THIRD HEART BY MAKIND IT INVISIBLE
      UpdateHearts()
@@ -120,16 +136,20 @@ local function StartTime()
  countDownTimer = timer.performWithDelay( 2000, UpdateTime, 0)
 end
 
+
+
 -- local functions 
 local function AskQuestion()
  	-- generate 2 random numbers between a max. and a min. number
  	randomOperator = math.random(1,4)
- 
+
+ 	
  	
   	if (randomOperator == 1) then
   		-- Creates the sum of the answer with addition.
    		randomNumber1 = math.random (1,20)
    		randomNumber2 = math.random (1,20)
+
 
    		correctAnswer = randomNumber1 + randomNumber2
 
@@ -137,12 +157,20 @@ local function AskQuestion()
   		-- Displays the the question on the screen with addiion.
  		questionObject.text = randomNumber1 .. " + " .. randomNumber2 .. " = "
  
- 	elseif (randomOperator == 1) then
-  		-- Creates the sum of the answer with addition.
+ 	elseif (randomOperator == 2) then
+  		-- Creates the difference of the answer with subtraction.
    		randomNumber1 = math.random (1,20)
    		randomNumber2 = math.random (1,20)
-   		correctAnswer = randomNumber1 + randomNumber2
-   																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																	
+
+   		if (randomNumber1 < randomNumber2) then
+   			temp = randomNumber1
+   			randomNumber1 = randomNumber2
+   			randomNumber2 = temp
+   			correctAnswer = randomNumber1 - randomNumber2
+   		end
+      	correctAnswer = randomNumber1 - randomNumber2	
+
+   		-- Displays the the question on the screen with subtraction.																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																														
  		questionObject.text = randomNumber1 .. " - " .. randomNumber2 .. " = "
    
  		
@@ -150,19 +178,35 @@ local function AskQuestion()
   	elseif (randomOperator == 3) then
  		-- Creates the product of the answer with multiplication
    		randomNumber1 = math.random (1,10)
-   		randomNumber2 = math.random (1,20)
+   		randomNumber2 = math.random (1,10)
+   		
+   		correctAnswer = randomNumber1 * randomNumber2
+   		
    		-- Displays the the question on th screen with Multiplication
   		questionObject.text = randomNumber1 .. " * " .. randomNumber2 .. " = "
-   		
 
-   		if (randomNumber1 < randomNumber2) then
-   			temp = randomNumber1
-   			randomNumber1 = randomNumber2
-   			rabdomNumber2 = temp
-   			correctAnswer = randomNumber1 - randomNumber2
-   		end
-      		correctAnswer = randomNumber1 - randomNumber2
-     end
+  	elseif (randomOperator == 4) then
+ 		-- Creates the product of the answer with division
+   		randomNumber1 = math.random (1,100)
+   		randomNumber2 = math.random (1,100)
+   		
+   		correctAnswer = randomNumber1 / randomNumber2
+   		
+   		-- Displays the the question on th screen with Multiplication
+  		questionObject.text = randomNumber1 .. " / " .. randomNumber2 .. " = "
+
+  	elseif (randomOperator == 5) then
+ 		-- Creates the product of the answer with division
+   		randomNumber1 = math.sqrt (1,10)
+   		randomNumber2 = math.sqrt (1,10)
+   		
+   		correctAnswer = randomNumber1 math.sqrt randomNumber2
+   		
+   		-- Displays the the question on th screen with Multiplication
+  		questionObject.text = randomNumber1 .. " math.sqrt " .. randomNumber2 .. " = "
+
+
+   	end
 end
 
 
@@ -209,7 +253,7 @@ local function NumericFieldListener( event )
    		 	-- This increases the points by one for each answer we get right.
     		numberCorrect = numberCorrect + 1
 
-    		-- Displays the points
+   			-- Displays the points
     		pointsTextObject.text = "numberCorrect = ".. numberCorrect
     
     		-- Clears the text field 
@@ -233,9 +277,15 @@ local function NumericFieldListener( event )
    		 	-- since answer is Incorrect, the correct object becomes invisible.
     		correctObject.isVisible = false
 
+
+    		incorrectObject.text = "The true and correct answer is " .. correctAnswer
+
     		-- Removes one heart for each question answered incorrectly
    		 	lives = lives - 1
-    
+
+   		 	-- gameOver sound appears 
+            gameOverSoundChannel = audio.play(gameOver)
+
    			-- this calls HideIncorrect after two seconds
     		timer.performWithDelay(2000,HideIncorrect)
     
@@ -244,6 +294,7 @@ local function NumericFieldListener( event )
 
    			-- reset the number of seconds back to the total amount of seconds 
     		secondsLeft = totalSeconds
+
         end
  	end
 end
@@ -268,10 +319,13 @@ clockText:setFillColor( 144/255, 234/255, 86/255 )
 
  
 -- create and display gameOver on the screen
-local backgroundImage = display.newImageRect("Images/gameOver.png", display.contentWidth, display.contentHeight)
-gameOver.x = display.contentWidth/2
-gameOver.y = display.contentHeight/2
-gameOver.isVisible = true 
+
+gameOver = display.newImageRect("Images/gameOver.png", display.contentWidth, display.contentHeight)
+gameOver.anchorX = 0
+gameOver.anchorY = 0
+gameOver.isVisible = false
+gameOverSoundChannel = audio.play(gameOver)
+
 
 
 -- create points box and make it visible
