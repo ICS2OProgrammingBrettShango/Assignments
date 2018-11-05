@@ -22,6 +22,9 @@ local countDownTimer
 local gameOver
 local GameOverChannel
 
+local youWin
+local YouWinSoundChannel
+
 local lives = 3
 local heart1
 local heart2
@@ -60,13 +63,23 @@ local wrongSoundChannel
 local GameOverSound = audio.loadSound("Sounds/GameOver.mp3")
 local GameOverSoundChannel
 
+-- YouWin Sound 
+local YouWinSound = audio.loadSound("Sounds/You Win.mp3")
+local YouWinSoundChannel
 --------------------------------------------------------
 -- LOCAL FUNCTIONS
 --------------------------------------------------------
 local function ShowGameOver()
 	-- Dislays the game over image and sound 
 	gameOver.isVisible = true
-	GameOverChannel = audio.play(GameOver)
+	GameOverSoundChannel = audio.play(GameOver)
+end
+
+
+local function ShowYouWin()
+	-- Dislays the game over image and sound 
+	youWin.isVisible = true
+	YouWinSoundChannel = audio.play(YouWin)
 end
 
 local function UpdateHearts()
@@ -93,8 +106,8 @@ local function UpdateHearts()
       heart1.isVisible = false
       heart2.isVisible = false
       heart3.isVisible = false
-      timer.performWithDelay(1000,ShowgameOver)
-      GameOverChannel = audio.play(GameOver)
+      timer.performWithDelay(1000,ShowameOver)
+      GameOverSoundChannel = audio.play(gameOver)
       gameOver.isVisible = true
       numericField.isVisible = false
       pointsTextObject.isVisible = false
@@ -189,13 +202,18 @@ local function AskQuestion()
    		randomNumber1 = math.random (1,100)
    		randomNumber2 = math.random (1,100)
    		
-   		correctAnswer = randomNumber1 / randomNumber2
+   		if (randomNumber1 < randomNumber2) then
+   			temp = randomNumber1
+   			randomNumber1 = randomNumber2
+   			randomNumber2 = temp
+   			correctAnswer = randomNumber1 / randomNumber2
+   		end
+      	correctAnswer = randomNumber1 /randomNumber2	
    		
    		-- Displays the the question on th screen with Multiplication
   		questionObject.text = randomNumber1 .. " / " .. randomNumber2 .. " = "
 
-  	elseif (randomOperator == 5) then
-
+  	
 
    	end
 end
@@ -269,7 +287,7 @@ local function NumericFieldListener( event )
     		correctObject.isVisible = false
 
 
-    		incorrectObject.text = "The true and correct answer is " .. correctAnswer
+    		incorrectObject.text = "The correct answer is " .. correctAnswer
 
     		-- Removes one heart for each question answered incorrectly
    		 	lives = lives - 1
@@ -288,6 +306,29 @@ local function NumericFieldListener( event )
 
         end
  	end
+end
+
+
+
+
+
+-- if the numberCorrect is five then:
+if  (numberCorrect == 5) then
+  	
+  	-- the youWin image is visible 
+    youWin.isVisible = true 
+   
+   	-- Plays the youWin sound 
+    YouWinSoundChannel = audio.play(YouWinSound)
+    
+    -- since the youWin image is visible , the gameOver image  becomes invisible.
+    gameOver.isVisible = false
+
+    -- this calls hide youWin after two seconds
+    timer.performWithDelay(2000,HideyouWin)
+  
+   	-- reset the number of seconds back to the total amount of seconds  
+	secondsLeft = totalSeconds
 end
 ------------------------------------------------------------
 -- OBJECTS CREATION
@@ -317,6 +358,11 @@ gameOver.anchorY = 0
 gameOver.isVisible = false
 GameOverChannel = audio.play(GameOver)
 
+youWin = display.newImageRect("Images/youWin.png", display.contentWidth, display.contentHeight)
+youWin.anchorX = 0
+youWin.anchorY = 0
+youWin.isVisible = false
+youWinSoundChannel = audio.play(youWin)
 
 
 -- create points box and make it visible
