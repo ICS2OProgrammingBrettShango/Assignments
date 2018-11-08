@@ -20,10 +20,10 @@ local clockText
 local countDownTimer
 
 local gameOver
-local GameOverChannel
+local youSuckSoundChannel
 
 local youWin
-local YouWinSoundChannel
+local WinnerSoundChannel
 
 local lives = 3
 local heart1
@@ -60,60 +60,87 @@ local wrongSound = audio.loadSound("Sounds/wrongSound.mp3")
 local wrongSoundChannel
 
 -- GameOver Sound 
-local GameOverSound = audio.loadSound("Sounds/GameOver.mp3")
-local GameOverSoundChannel
+local youSuck = audio.loadSound("Sounds/youSuck.mp3")
+local youSuckSoundChannel
 
 -- YouWin Sound 
-local YouWinSound = audio.loadSound("Sounds/You Win.mp3")
-local YouWinSoundChannel
+local WinnerSound = audio.loadSound("Sounds/Winner.mp3")
+local WinnerSoundChannel
 --------------------------------------------------------
 -- LOCAL FUNCTIONS
 --------------------------------------------------------
 local function ShowGameOver()
 	-- Dislays the game over image and sound 
 	gameOver.isVisible = true
-	GameOverSoundChannel = audio.play(GameOver)
+	WinnerSoundChannel = audio.play(Winner)
 end
 
 
-local function ShowYouWin()
+local function ShowYouWinMan()
 	-- Dislays the game over image and sound 
 	youWin.isVisible = true
-	YouWinSoundChannel = audio.play(YouWin)
+	WinnerSoundChannel = audio.play(Winner)
 end
 
 local function UpdateHearts()
- 	if (lives == 3) then
-      heart1.isVisible = true
-      heart2.isVisible = true
-      heart3.isVisible = true
+ 	if(lives == 3) then
+    heart1.isVisible = true
+    heart2.isVisible = true
+    heart3.isVisible = true
       
 
      
-      elseif (lives == 2) then
-      heart1.isVisible = true
-      heart2.isVisible = true
-      heart3.isVisible = false
+    elseif (lives == 2) then
+    heart1.isVisible = true
+    heart2.isVisible = true
+    heart3.isVisible = false
      
 
-     elseif (lives == 1) then
-      heart1.isVisible = true
-      heart2.isVisible = false
-      heart3.isVisible = false
+    elseif (lives == 1) then
+    heart1.isVisible = true
+    heart2.isVisible = false
+    heart3.isVisible = false
     
 
-     elseif (lives == 0) then
-      heart1.isVisible = false
-      heart2.isVisible = false
-      heart3.isVisible = false
-      timer.performWithDelay(1000,ShowameOver)
-      GameOverSoundChannel = audio.play(gameOver)
-      gameOver.isVisible = true
-      numericField.isVisible = false
-      pointsTextObject.isVisible = false
-      questionObject.isVisible = false
-    end
+    elseif (lives == 0) then
+    heart1.isVisible = false
+    heart2.isVisible = false
+    heart3.isVisible = false
+    timer.performWithDelay(1000,ShowgameOver)
+    youSuckSoundChannel = audio.play(youSuck)
+    gameOver.isVisible = true
+    numericField.isVisible = false
+    pointsTextObject.isVisible = false
+    questionObject.isVisible = false
+  
+  end
 end
+
+
+
+
+
+local function YouWinMan()
+ 	if (numberCorrect == 5 ) then
+    heart1.isVisible = false
+    heart2.isVisible = false
+    heart3.isVisible = false
+    timer.performWithDelay(1000,ShowyouWin)
+    youWin.isVisible = true
+    WinnerSoundChannel = audio.play(WinnerSound)
+    questionObject.isVisible = false
+    clockText.isVisible = false
+    pointsTextObject.isVisible = false
+    numericField.isVisible = false
+    
+    --***IF THERE THE NUMBERCORRECT IS 5 THEN THE YOUWIN IMAGE POPS UP ALONG WITH WINNER MP3.,
+    -- YOUWIN IMAGE POPS UP by making it visible 
+    --WINNER SOUNDTRACK IS PLAYABLE
+    
+    --*** CALL THE FUNCTION TO ASK A NEW QUESTION
+ end
+end
+
 
 
 	
@@ -157,16 +184,16 @@ local function AskQuestion()
 
  	
  	
-  	if (randomOperator == 1) then
-  		-- Creates the sum of the answer with addition.
-   		randomNumber1 = math.random (1,20)
-   		randomNumber2 = math.random (1,20)
+  if (randomOperator == 1) then
+  	-- Creates the sum of the answer with addition.
+   	randomNumber1 = math.random (1,20)
+   	randomNumber2 = math.random (1,20)
 
 
-   		correctAnswer = randomNumber1 + randomNumber2
+   	correctAnswer = randomNumber1 + randomNumber2
 
  
-  		-- Displays the the question on the screen with addiion.
+  	-- Displays the the question on the screen with addiion.
  		questionObject.text = randomNumber1 .. " + " .. randomNumber2 .. " = "
  
  	elseif (randomOperator == 2) then
@@ -208,16 +235,24 @@ local function AskQuestion()
    			randomNumber2 = temp
    			correctAnswer = randomNumber1 / randomNumber2
    		end
-      	correctAnswer = randomNumber1 /randomNumber2	
+      correctAnswer = randomNumber1 / randomNumber2	
+
+
    		
    		-- Displays the the question on th screen with Multiplication
   		questionObject.text = randomNumber1 .. " / " .. randomNumber2 .. " = "
-
-  	
-
-   	end
+  end 
 end
 
+
+
+       
+
+    
+
+
+      
+  
 
 local function HideCorrect()
  correctObject.isVisible = false
@@ -237,99 +272,83 @@ local function NumericFieldListener( event )
 	if ( event.phase == "began" ) then
  
 		--clear text field 
-  		event.target.text = ""
+  	event.target.text = ""
     
  	elseif (event.phase == "submitted") then
-  		-- when the answer is submitted (enter key is pressed) set user input bto user's answer
-  		userAnswer = tonumber(event.target.text)
+    -- when the answer is submitted (enter key is pressed) set user input bto user's answer
+  	userAnswer = tonumber(event.target.text)
   
    
-    	-- if the user's answer and the correct answer and the correct answer are the same:
-  		if  (userAnswer == correctAnswer) then
+    -- if the user's answer and the correct answer and the correct answer are the same:
+  	if  (userAnswer == correctAnswer) then
   	
-  			-- the correct object is visible 
-    		correctObject.isVisible = true 
+  	-- the correct object is visible 
+    correctObject.isVisible = true 
    
-   			-- Plays the correct sound 
-    		correctSoundChannel = audio.play(correctSound)
+   	-- Plays the correct sound 
+    correctSoundChannel = audio.play(correctSound)
     
-    		-- since answer is correct, the incorrect object becomes invisible.
-     		incorrectObject.isVisible = false
+    -- since answer is correct, the incorrect object becomes invisible.
+    incorrectObject.isVisible = false
 
-     		-- this calls hide correct after two seconds
-    		timer.performWithDelay(2000,HideCorrect)
+    -- this calls hide correct after two seconds
+    timer.performWithDelay(2000,HideCorrect)
    
-   		 	-- This increases the points by one for each answer we get right.
-    		numberCorrect = numberCorrect + 1
+   	-- This increases the points by one for each answer we get right.
+    numberCorrect = numberCorrect + 1
 
-   			-- Displays the points
-    		pointsTextObject.text = "numberCorrect = ".. numberCorrect
-    
-    		-- Clears the text field 
-    		event.target.text = ""
+    --***IF NUMBER CORRECT IS THE NUMBER 5, PLAY WINNER SOUND ,
+  --SHOW A "YOU Win IMAGE AND CANCEL THE TIMER,
+     YouWinMan()
+  --*** CALL THE FUNCTION TO ASK A NEW QUESTION
 
-    		-- reset the number of seconds back to the total amount of seconds  
-    		secondsLeft = totalSeconds
+   	-- Displays the points
+    pointsTextObject.text = "numberCorrect = ".. numberCorrect
+  
+    -- Clears the text field 
+    event.target.text = ""
+
+    -- reset the number of seconds back to the total amount of seconds  
+    secondsLeft = totalSeconds
 
 
-		else
+	else
 
-			-- The incorrect object becomes visible
+		-- The incorrect object becomes visible
 			incorrectObject.isVisible = true
     
-    		-- Plays the incorrect sound
-    		wrongSoundChannel = audio.play(wrongSound)
+    	-- Plays the incorrect sound
+    	wrongSoundChannel = audio.play(wrongSound)
+  
+    	-- Decreases the amount of hearts for each answer the user gets wrong
+    	UpdateHearts()
     
-    		-- Decreases the amount of hearts for each answer the user gets wrong
-    		UpdateHearts()
+   		-- since answer is Incorrect, the correct object becomes invisible.
+    	correctObject.isVisible = false
+
+    	incorrectObject.text = "The correct answer is " .. correctAnswer
+
+    	-- Removes one heart for each question answered incorrectly
+   		lives = lives - 1
+
+   		-- gameOver sound appears 
+      GameOverChannel = audio.play(GameOver)
+
+   		-- this calls HideIncorrect after two seconds
+    	timer.performWithDelay(2000,HideIncorrect)
     
-   		 	-- since answer is Incorrect, the correct object becomes invisible.
-    		correctObject.isVisible = false
+    	-- Clears the text field
+   	 	event.target.text = "" 
 
+   		-- reset the number of seconds back to the total amount of seconds 
+    	secondsLeft = totalSeconds
 
-    		incorrectObject.text = "The correct answer is " .. correctAnswer
-
-    		-- Removes one heart for each question answered incorrectly
-   		 	lives = lives - 1
-
-   		 	-- gameOver sound appears 
-            GameOverChannel = audio.play(GameOver)
-
-   			-- this calls HideIncorrect after two seconds
-    		timer.performWithDelay(2000,HideIncorrect)
-    
-    		-- Clears the text field
-   	 		event.target.text = "" 
-
-   			-- reset the number of seconds back to the total amount of seconds 
-    		secondsLeft = totalSeconds
-
-        end
+    end
  	end
 end
 
 
 
-
-
--- if the numberCorrect is five then:
-if  (numberCorrect == 5) then
-  	
-  	-- the youWin image is visible 
-    youWin.isVisible = true 
-   
-   	-- Plays the youWin sound 
-    YouWinSoundChannel = audio.play(YouWinSound)
-    
-    -- since the youWin image is visible , the gameOver image  becomes invisible.
-    gameOver.isVisible = false
-
-    -- this calls hide youWin after two seconds
-    timer.performWithDelay(2000,HideyouWin)
-  
-   	-- reset the number of seconds back to the total amount of seconds  
-	secondsLeft = totalSeconds
-end
 ------------------------------------------------------------
 -- OBJECTS CREATION
 ------------------------------------------------------------
@@ -356,13 +375,13 @@ gameOver = display.newImageRect("Images/gameOver.png", display.contentWidth, dis
 gameOver.anchorX = 0
 gameOver.anchorY = 0
 gameOver.isVisible = false
-GameOverChannel = audio.play(GameOver)
+youSuckSoundChannel = audio.play(Winner)
 
 youWin = display.newImageRect("Images/youWin.png", display.contentWidth, display.contentHeight)
 youWin.anchorX = 0
 youWin.anchorY = 0
 youWin.isVisible = false
-youWinSoundChannel = audio.play(youWin)
+WinnerSoundChannel = audio.play(Winner)
 
 
 -- create points box and make it visible
@@ -401,4 +420,6 @@ numericField:addEventListener( "userInput", NumericFieldListener)
 -- call the function to ask the Question
 AskQuestion()
 StartTime()
+UpdateHearts()
+YouWinMan()
 
