@@ -10,7 +10,6 @@
 -----------------------------------------------------------------------------------------
 -- INITIALIZATIONS
 -----------------------------------------------------------------------------------------
-
 -- Use Composer Libraries
 local composer = require( "composer" )
 local widget = require( "widget" )
@@ -57,8 +56,8 @@ function scene:create( event )
     bkg_image = display.newImageRect("Images/Instructions Screen.png", display.contentWidth, display.contentHeight)
     bkg_image.x = display.contentCenterX
     bkg_image.y = display.contentCenterY
-    bkg_image.width = display.ContentWidth
-    bkg_image.height = display.ContentHeight
+    bkg_image.width = display.contentWidth
+    bkg_image.height = display.contentHeight
 
     -- Associating display objects with this scene 
     sceneGroup:insert( bkg_image )
@@ -66,37 +65,29 @@ function scene:create( event )
     -- Send the background image to the back layer so all other objects can be on top
     bkg_image:toBack()
 
-    -----------------------------------------------------------------------------------------
+   -----------------------------------------------------------------------------------------
     -- BUTTON WIDGETS
-    -----------------------------------------------------------------------------------------
+    -----------------------------------------------------------------------------------------   
+  -- Creating Credits Button
+    instructionsButton = widget.newButton( 
+        {
+            -- Set its position on the screen relative to the screen size
+            x = display.contentWidth*1/8,
+            y = display.contentHeight*2/8,
 
-    -- Creating Back Button
-    backButton = widget.newButton( 
-    {
-        -- Setting Position
-        x = display.contentWidth*1/8,
-        y = display.contentHeight*15/16,
 
-        -- Setting Dimensions
-        -- width = 1000,
-        -- height = 106,
+            width = 200,
+            height = 200,
 
-        -- Setting Visual Properties
-        defaultFile = "Images/Back Button Unpressed.png",
-        overFile = "Images/Back Button Pressed.png",
+            -- Insert the images here
+            defaultFile = "Images/InstructionsButtonUnpressed.png",
+            overFile = "Images/InstructionsButtonPressed.png",
 
-        -- Setting Functional Properties
-        onRelease = BackTransition
-
-    } )
-
-    -----------------------------------------------------------------------------------------
-
-    -- Associating Buttons with this scene
-    sceneGroup:insert( backButton )
+            -- When the button is released, call the Credits transition function
+            onRelease = instructionsTransition
+        } ) 
     
-end --function scene:create( event )
-
+    
 -----------------------------------------------------------------------------------------
 
 -- The function called when the scene is issued to appear on screen
@@ -120,7 +111,6 @@ function scene:show( event )
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
-        -- function scene:show( event )
     end
 
 end -- function scene:show( event )

@@ -54,7 +54,7 @@ function scene:create( event )
     -----------------------------------------------------------------------------------------
 
     -- Insert the background image and set it to the center of the screen
-    bkg_image = display.newImageRect("Images/Credits Screen.png", display.contentWidth, display.contentHeight)
+    bkg_image = display.newImageRect("Images/CreditsScreen.png", display.contentWidth, display.contentHeight)
     bkg_image.x = display.contentCenterX
     bkg_image.y = display.contentCenterY
     bkg_image.width = display.contentWidth
@@ -66,37 +66,9 @@ function scene:create( event )
     -- Send the background image to the back layer so all other objects can be on top
     bkg_image:toBack()
 
-    -----------------------------------------------------------------------------------------
-    -- BUTTON WIDGETS
-    -----------------------------------------------------------------------------------------
-
-    -- Creating Back Button
-    backButton = widget.newButton( 
-    {
-        -- Setting Position
-        x = display.contentWidth*1/8,
-        y = display.contentHeight*15/16,
-
-        -- Setting Dimensions
-        -- width = 1000,
-        -- height = 106,
-
-        -- Setting Visual Properties
-        defaultFile = "Images/Back Button Unpressed.png",
-        overFile = "Images/Back Button Pressed.png",
-
-        -- Setting Functional Properties
-        onRelease = BackTransition
-
-    } )
-
-    -----------------------------------------------------------------------------------------
-
-    -- Associating Buttons with this scene
-    sceneGroup:insert( backButton )
     
-end --function scene:create( event )
-
+end
+    
 -----------------------------------------------------------------------------------------
 
 -- The function called when the scene is issued to appear on screen

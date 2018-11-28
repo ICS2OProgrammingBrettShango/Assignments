@@ -38,6 +38,7 @@ local bkg_image
 -- The function called when the screen doesn't exist
 function scene:create( event )
 
+
     -- Creating a group that associates objects with the scene
     local sceneGroup = self.view
 
@@ -52,6 +53,26 @@ function scene:create( event )
 
     -- Send the background image to the back layer so all other objects can be on top
     bkg_image:toBack()
+
+    backButton = widget.newButton( 
+        {
+            -- Set its position on the screen relative to the screen size
+            x = display.contentWidth*1/8,
+            y = display.contentHeight*2/8,
+
+
+            width = 200,
+            height = 200,
+
+            -- Insert the images here
+            defaultFile = "Images/BackButtonUnpressed.png",
+            overFile = "Images/BackButtonPressed.png",
+
+            -- When the button is released, call the Credits transition function
+            onRelease = backTransition
+        } ) 
+    
+
 
         -- Insert background image into the scene group in order to ONLY be associated with this scene
     sceneGroup:insert( bkg_image )    

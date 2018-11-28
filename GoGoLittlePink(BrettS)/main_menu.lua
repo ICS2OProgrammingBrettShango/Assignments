@@ -36,6 +36,7 @@ local bkg_image
 local playButton
 local creditsButton
 local instructionsButton
+local backButton
 
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -100,7 +101,7 @@ function scene:create( event )
             x = display.contentWidth/2,
             y = display.contentHeight*7/8,
 
-             width = 200,
+            width = 200,
             height = 200,
 
 
@@ -111,9 +112,14 @@ function scene:create( event )
             overFile = "Images/Start Button Pressed.png",
 
             -- When the button is released, call the Level1 screen transition function
-            onRelease = Level1ScreenTransition          
+            onRelease = playTransition          
         } )
 
+
+
+
+
+    
     -----------------------------------------------------------------------------------------
 
     -- Creating Credits Button
@@ -132,13 +138,12 @@ function scene:create( event )
             overFile = "Images/Credits Button Pressed.png",
 
             -- When the button is released, call the Credits transition function
-            onRelease = CreditsTransition
+            onRelease = creditsTransition
         } ) 
     
-    -- ADD INSTRUCTIONS BUTTON WIDGET
+    -- ADD BACK BUTTON WIDGET
 
-    -- Creating Credits Button
-    instructionsButton = widget.newButton( 
+    backButton = widget.newButton( 
         {
             -- Set its position on the screen relative to the screen size
             x = display.contentWidth*1/8,
@@ -149,11 +154,11 @@ function scene:create( event )
             height = 200,
 
             -- Insert the images here
-            defaultFile = "Images/InstructionsButtonUnpressed.png",
-            overFile = "Images/InstructionsButtonPressed.png",
+            defaultFile = "Images/BackButtonUnpressed.png",
+            overFile = "Images/BackButtonPressed.png",
 
             -- When the button is released, call the Credits transition function
-            onRelease = InstructionsTransition
+            onRelease = backTransition
         } ) 
     
 
@@ -162,10 +167,9 @@ function scene:create( event )
     -- Associating button widgets with this scene
     sceneGroup:insert( playButton )
     sceneGroup:insert( creditsButton )
-    sceneGroup:insert( instructionsButton)
-    
-    -- INSERT INSTRUCTIONS BUTTON INTO SCENE GROUP
+    sceneGroup:insert( instructionsButton )
 
+   
 end -- function scene:create( event )   
 
 
